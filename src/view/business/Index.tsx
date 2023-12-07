@@ -77,7 +77,7 @@ export default function () {
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>
                         </div>
-                    </a>
+                    </Link>
                 </div>
                 <div className="item">
                     <Link to="/profile">
