@@ -84,7 +84,7 @@ const Profile = () => {
 
     return (
         <>
-            <NavBar onBack={() => navigate(-1)}>基本资料</NavBar>
+            <NavBar className="top" onBack={() => navigate(-1)}>基本资料</NavBar>
             <AreaPicker visible={area} onClose={() => {
                 SetArea(false)
             }} onConfirm={AreaConfirm}/>

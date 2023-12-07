@@ -3,8 +3,8 @@ import {Link, useNavigate} from "react-router-dom";
 import {Image, InfiniteScroll, PullToRefresh, Skeleton, Swiper} from "antd-mobile";
 import {MouseEvent, useEffect, useState} from "react";
 import {GET} from "@/utils/axios";
-import {homeInfoApi, homeInfoListApi, RoomInfo} from "@/api/home";
-import {priceFormat} from "@/utils/common";
+import {CouponInterface, homeInfoApi, homeInfoListApi, RoomInfo} from "@/api/home";
+import {buildUrl, priceFormat} from "@/utils/common";
 import {useRouteStatus} from "@/common";
 import {GlobalToast} from "@/utils/toast";
 
@@ -28,7 +28,7 @@ function Item({item}: { item: RoomInfo }) {
     const navigate = useNavigate();
     const [love, setLove] = useState(item.collect)
     return (<div className="item">
-        <div onClick={() => navigate(`/home/detail/${item.id}`)}>
+        <div onClick={() => navigate(buildUrl("/home/detail/", {id: item.id}))}>
             <div className="collect">
                 <img onClick={toLove} src="@/assets/images/heart.png"
                      style={{"filter": love != null && love !== 0 ? 'none' : "sepia(1)"}} alt=""/>
@@ -49,7 +49,7 @@ function Item({item}: { item: RoomInfo }) {
                         <span className="price">￥{priceFormat(item.price)}/晚</span>
                         <span className="market_price">￥{priceFormat(item.price)}/晚</span>
                     </div>
-                    <Link to={`/home/detail/${item.id}`}>
+                    <Link to={buildUrl(`/home/detail/`, {id: item.id})}>
                         <span className="btn">立即预定</span>
                     </Link>
                 </div>
@@ -59,7 +59,7 @@ function Item({item}: { item: RoomInfo }) {
 }
 
 // 轮播图
-function Carsouel({rooms}: { rooms: Array<RoomInfo> }) {
+function Carsouel({rooms}: { rooms: Array<CouponInterface> }) {
     const navigate = useNavigate();
     return (
         <Swiper loop>
@@ -68,12 +68,12 @@ function Carsouel({rooms}: { rooms: Array<RoomInfo> }) {
                 return (<Swiper.Item key={e.id}>
                     <Image src={e.thumb_text} fit='fill' style={{
                         "width": "100%",
-                        "height": "213px"
-                    }} onClick={() => navigate("/home/detail/" + e.id)}/>
+                        "height": "123px"
+                    }} onClick={() => navigate(buildUrl("/home/coupon/", {id: e.id}))}/>
                 </Swiper.Item>)
             }) : <Swiper.Item><Skeleton animated style={{
                 "width": "100%",
-                "height": "213px"
+                "height": "123px"
             }}/></Swiper.Item>}
         </Swiper>
     )
@@ -88,12 +88,12 @@ function Items({items}: { items: Array<RoomInfo> }) {
 }
 
 export default function () {
-    const [carousel, setCarousel] = useState<Array<RoomInfo>>([])
+    const [carousel, setCarousel] = useState<Array<CouponInterface>>([])
     const [itemsData, setItemsData] = useState<Array<RoomInfo>>([])
     const [hasMore, setHasMore] = useState(false)
     const [filter, setFilter] = useState<string>("")
     useEffect(() => {
-        homeInfoApi().then(res => {
+        homeInfoApi(filter).then(res => {
             setItemsData(res.data.list)
             setHasMore(itemsData.length < res.data.count)
             setCarousel(res.data.carousel)
@@ -129,7 +129,7 @@ export default function () {
                 </div>
                 <div className="hotellist">
                     {itemsData.length > 0 ? <Items items={itemsData}/>
-                        : (<><Skeleton animated style={{
+                        : hasMore ? (<><Skeleton animated style={{
                             "width": "100%",
                             "height": "213px"
                         }}/><Skeleton animated style={{
@@ -138,7 +138,7 @@ export default function () {
                         }}/><Skeleton animated style={{
                             "width": "100%",
                             "height": "213px"
-                        }}/></>)}
+                        }}/></>) : ""}
 
                 </div>
                 <InfiniteScroll loadMore={loadMore} hasMore={hasMore}/>

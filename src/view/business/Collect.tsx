@@ -5,7 +5,7 @@ import {InfiniteScroll, NavBar, PullToRefresh, Skeleton} from "antd-mobile";
 import React, {MouseEvent, useEffect, useState} from "react";
 import {GET} from "@/utils/axios";
 import {RoomInfo} from "@/api/home";
-import {priceFormat} from "@/utils/common";
+import {buildUrl, priceFormat} from "@/utils/common";
 import {useRouteStatus} from "@/common";
 import {GlobalToast} from "@/utils/toast";
 import {collectListApi} from "@/api/business";
@@ -30,7 +30,7 @@ function Item({item}: { item: RoomInfo }) {
     const navigate = useNavigate();
     const [love, setLove] = useState(item.collect)
     return (<div className="item">
-        <div onClick={() => navigate(`/home/detail/${item.id}`)}>
+        <div onClick={() => navigate(buildUrl(`/home/detail/`, {id: item.id}))}>
             <div className="collect">
                 <img onClick={toLove} src="@/assets/images/heart.png"
                      style={{"filter": love != null && love !== 0 ? 'none' : "sepia(1)"}} alt=""/>
@@ -51,7 +51,7 @@ function Item({item}: { item: RoomInfo }) {
                         <span className="price">￥{priceFormat(item.price)}/晚</span>
                         <span className="market_price">￥{priceFormat(item.price)}/晚</span>
                     </div>
-                    <Link to={`/home/detail/${item.id}`}>
+                    <Link to={buildUrl(`/home/detail/`, {id: item.id})}>
                         <span className="btn">立即预定</span>
                     </Link>
                 </div>

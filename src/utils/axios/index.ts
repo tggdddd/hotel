@@ -83,7 +83,7 @@ function createAxios() {
         (error: AxiosError) => {
             console.error("响应错误", error)
             if (error.code === "ERR_CANCELED") {
-                return
+                return Promise.reject(null)
             }
             let message;
             switch (error.response?.status) {

@@ -72,7 +72,7 @@ export default function () {
                     </a>
                 </div>
                 <div className="item">
-                    <a href="coupon.html">
+                    <a href="/business/coupon">
                         <div className="title">我的优惠券</div>
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>

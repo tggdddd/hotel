@@ -57,7 +57,7 @@ export function useRouteStatus() {
 
         // 登录账号信息
         get user() {
-            return getUser()
+            return getUser() || {}
         }
 
         navigate(to: To, options?: NavigateOptions | undefined) {

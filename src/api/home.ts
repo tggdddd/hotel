@@ -1,4 +1,5 @@
 import {GET, Result} from "@/utils/axios";
+import {BusinessInterface} from "@/api/business";
 
 export interface RoomInfo {
     id: string,
@@ -14,25 +15,68 @@ export interface RoomInfo {
     "collect": null | number
 }
 
+export interface CouponInterface {
+    id: string,
+    title: string,
+    thumb: string,
+    rate: number,
+    total: number,
+    status: number,
+    status_text: string,
+    createtime: number,
+    createtime_text: string,
+    endtime: number,
+    endtime_text: string,
+    thumb_text: string,
+    receive: boolean
+}
+
 export interface HomeInfo {
-    carousel: Array<RoomInfo>,
+    carousel: Array<CouponInterface>,
     list: Array<RoomInfo>,
     count: number
 }
 
-export function homeInfoApi(): Promise<Result<HomeInfo>> {
-    return GET("/index/index")
+export interface CouponReceiveInterface {
+    id: string,
+    cid: string,
+    status: number,
+    status_text: string,
+    createtime: number,
+    createtime_text: string,
+    business: BusinessInterface,
+    coupon: CouponInterface
+}
+
+export function homeInfoApi(filter: string): Promise<Result<HomeInfo>> {
+    return GET("/index/index", {
+        filter: filter
+    })
 }
 
 export function homeInfoListApi(offset: number): Promise<Result<HomeInfo>> {
     return GET("/index/index_list", {offset})
 }
 
-function mock<T>(data: T): Promise<Result<T>> {
-    return new Promise(resolve => resolve({
-        data: data,
-        code: 0,
-        msg: "",
-        time: Date.now()
-    }))
+
+export function couponInfoApi(id: string, loading: string | undefined = undefined): Promise<Result<{
+    coupon: CouponInterface,
+    receive: Array<CouponReceiveInterface>
+}>> {
+    return GET("/index/coupon_info", {id}, {}, loading)
+}
+
+export function couponPickApi(id: string, loading: string | undefined = undefined): Promise<Result<any>> {
+    return GET("/index/coupon_pick", {id}, {}, loading)
+}
+
+export interface homeDetailInterface {
+    detail: RoomInfo,
+    coupon: Array<CouponInterface>,
+    comment: Array<any>,
+    equipment: Array<any>
+}
+
+export function getHotelDetailApi(id: string, loading: string | undefined = undefined): Promise<Result<homeDetailInterface>> {
+    return GET("/index/hotel_detail", {id}, {}, loading)
 }

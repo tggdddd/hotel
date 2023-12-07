@@ -6,6 +6,7 @@ import {Button, DatePicker, NavBar, Popup, Space} from "antd-mobile";
 import {NavLink} from "react-router-dom";
 import Guest from "@/view/home/Guest";
 import {GuestInterface} from "@/api/business";
+import {buildUrl} from "@/utils/common";
 
 function Confirm() {
     const routeStatus = useRouteStatus();
@@ -108,7 +109,7 @@ function Confirm() {
                     <span>￥6600.00</span>
                 </div>
                 <div className="btns">
-                    <NavLink to="/home/booking/1">提交订单</NavLink>
+                    <NavLink to={buildUrl("/home/booking/", {id: "3"})}>提交订单</NavLink>
                 </div>
             </div>
         </>)

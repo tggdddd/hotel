@@ -5,6 +5,7 @@ import Register from "@/view/business/Register";
 import Profile from "@/view/business/Profile";
 import Collect from "@/view/business/Collect";
 import Order from "@/view/business/Order";
+import Coupon from "@/view/business/Coupon";
 
 const routes: Array<any> = [
     {
@@ -32,6 +33,10 @@ const routes: Array<any> = [
     {
         path: '/order',
         element: <Order/>
+    },
+    {
+        path: '/business/coupon',
+        element: <Coupon/>
     }
 ]
 

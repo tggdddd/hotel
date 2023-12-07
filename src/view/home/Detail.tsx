@@ -1,23 +1,47 @@
 import "@/assets/css/detail.css";
 import "@/assets/css/swiper-bundle.min.css";
-import React, {ComponentProps} from "react";
-import {NavLink, useNavigate} from "react-router-dom";
-import {NavBar} from "antd-mobile";
+import React, {ComponentProps, useEffect, useState} from "react";
+import {NavLink, useNavigate, useSearchParams} from "react-router-dom";
+import {Image, NavBar, Swiper} from "antd-mobile";
+import {buildUrl} from "@/utils/common";
+import {getHotelDetailApi, homeDetailInterface} from "@/api/home";
 
 
 export default function (props: ComponentProps<any>) {
+    const [searchParams] = useSearchParams();
+    const id = searchParams.get("id") || "";
     const navigate = useNavigate();
+    const [detail, setDetail] = useState<homeDetailInterface>()
+    useEffect(() => {
+        getHotelDetailApi(id).then(res => {
+            setDetail(res.data)
+        })
+    }, []);
+
+    function arrayAdapt(data: string | Array<any>) {
+        console.log("arrayAdapt", data)
+        if (data == null) {
+            return []
+        }
+        if (Array.isArray(data)) {
+            return data
+        }
+        return [data]
+    }
     return (
         <>
+            {detail == null ? "" : <>
             <NavBar className="top" onBack={() => navigate(-1)}>详情</NavBar>
-            <div className="swiper mySwiper">
-                <div className="swiper-wrapper">
-                    <div className="swiper-slide"><img src="@/assets/images/hotel1.jpg" alt=""/></div>
-                    <div className="swiper-slide"><img src="@/assets/images/hotel2.jpg" alt=""/></div>
-                    <div className="swiper-slide"><img src="@/assets/images/hotel3.jpg" alt=""/></div>
-                </div>
-                <div className="swiper-pagination"></div>
-            </div>
+                <Swiper loop>
+                    {arrayAdapt(detail.detail.thumb_text).map((src, index) => {
+                        return (<Swiper.Item key={index}>
+                            <Image src={src} fit='fill' style={{
+                                "width": "100%",
+                                "height": "123px"
+                            }}/>
+                        </Swiper.Item>)
+                    })}
+                </Swiper>
             <div className="info_tabs">
                 <li>
                     <a href="#intro">介绍</a>
@@ -31,13 +55,10 @@ export default function (props: ComponentProps<any>) {
             </div>
             <div className="detail_top">
                 <div id="intro" className="intro">
-                    <div className="title">暑假特价房</div>
+                    <div className="title">{detail.detail.name}</div>
                     <div className="betwee">
                         <div className="left">
-                            <span>推广优惠</span>
-                            <span>月租惠选</span>
-                            <span>满减优惠</span>
-                            <span>节假日优惠</span>
+                            {(detail.detail.tags || []).map((e, index) => <span key={index}>{e}</span>)}
                         </div>
                         <div className="right">
                             分享
@@ -99,15 +120,15 @@ export default function (props: ComponentProps<any>) {
                     <div className="title">预订须知</div>
                     <div className="item">
                         <span className="tips">预订房型：</span>
-                        <span>新房特惠</span>
+                        <span>{detail.detail.name}</span>
                     </div>
                     <div className="item">
                         <span className="tips">入离时间：</span>
                         <span>15:00 后入住，12:00 前退房</span>
                     </div>
                     <div className="item">
-                        <span className="tips">预订时长：</span>
-                        <span>随时可预订,最少预订1天, 最多预订天数不限</span>
+                        <span className="tips">房间数量：</span>
+                        <span>{detail.detail.total}</span>
                     </div>
                 </div>
             </div>
@@ -116,9 +137,9 @@ export default function (props: ComponentProps<any>) {
                     ￥60
                 </div>
                 <div className="btn">
-                    <NavLink to={"/home/confirm/" + props.id}>立即预定</NavLink>
+                    <NavLink to={buildUrl("/home/confirm/", {id: props.id})}>立即预定</NavLink>
                 </div>
             </div>
-        </>
+            </>}</>
     )
 }
