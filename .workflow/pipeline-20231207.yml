@@ -22,7 +22,7 @@ stages:
           hostID:
             - 02e610ed-3e7e-4480-ad6a-2c82895e3131
         script:
-          - sh  /www/wwwroot/jackr.cn/fastadmin/pubilc/update.sh  /www/wwwroot/hotel.jackr.cn
+          - sh  /www/wwwroot/jackr.cn/fastadmin/public/update.sh  /www/wwwroot/hotel.jackr.cn
         notify: []
         strategy:
           retry: '0'
