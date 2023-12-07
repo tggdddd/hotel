@@ -1,0 +1,36 @@
+version: '1.0'
+name: pipeline-20231207
+displayName: pipeline-20231207
+triggers:
+  trigger: auto
+  push:
+    branches:
+      prefix:
+        - ''
+stages:
+  - name: stage-eb3ec357
+    displayName: 未命名
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: deploy@agent
+        name: deploy_agent
+        displayName: 主机部署
+        hostGroupID:
+          ID: 阿里云
+          hostID:
+            - 02e610ed-3e7e-4480-ad6a-2c82895e3131
+        deployArtifact:
+          - source: artifact
+            name: output
+            target: ~/gitee_go/deploy
+            artifactRepository: default
+            artifactName: output
+            artifactVersion: latest
+        script:
+          - tar zxvf ~/gitee_go/deploy/output.tar.gz -C /www/wwwroot/hotel.jackr.cn
+          - sh  /www/wwwroot/jackr.cn/fastadmin/pubilc/update.sh  /www/wwwroot/hotel.jackr.cn
+        notify: []
+        strategy:
+          retry: '0'
