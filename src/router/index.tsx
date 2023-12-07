@@ -1,5 +1,5 @@
 import React from 'react'
-import {createHashRouter, RouterProvider} from 'react-router-dom'
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import App from "@/App";
 import {buildKey, StateEnum} from "@/state/stateEnum";
 import {setState} from "@/state/state";
@@ -28,7 +28,7 @@ routes.forEach(value => {
 })
 
 function RouteViewProvider() {
-    const routerList = createHashRouter([
+    const routerList = createBrowserRouter([
         {
             path: '/',
             element: (
