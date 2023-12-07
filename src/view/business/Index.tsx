@@ -1,6 +1,6 @@
 import "@/assets/css/user.css"
 import {delCookie} from "@/state/state";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useRouteStatus} from "@/common";
 
 export default function () {
@@ -48,31 +48,31 @@ export default function () {
             </div>
             <div className="menu-cell">
                 <div className="item">
-                    <a href="/order">
+                    <Link to="/order">
                         <div className="title">房间订单</div>
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>
                         </div>
-                    </a>
+                    </Link>
                 </div>
                 <div className="item">
-                    <a href="/collect">
+                    <Link to="/collect">
                         <div className="title">我的收藏</div>
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>
                         </div>
-                    </a>
+                    </Link>
                 </div>
                 <div className="item">
-                    <a href="/profile">
+                    <Link to="/profile">
                         <div className="title">个人资料</div>
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>
                         </div>
-                    </a>
+                    </Link>
                 </div>
                 <div className="item">
-                    <a href="/business/coupon">
+                    <Link to="/business/coupon">
                         <div className="title">我的优惠券</div>
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>
@@ -80,20 +80,20 @@ export default function () {
                     </a>
                 </div>
                 <div className="item">
-                    <a href="/profile">
+                    <Link to="/profile">
                         <div className="title">关于我们</div>
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>
                         </div>
-                    </a>
+                    </Link>
                 </div>
                 <div className="item">
-                    <a href="#" onClick={loginOut}>
+                    <Link to="#" onClick={loginOut}>
                         <div className="title">退出登陆</div>
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>
                         </div>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </>

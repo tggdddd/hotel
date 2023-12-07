@@ -1,4 +1,3 @@
-import {useNavigate} from "react-router-dom";
 import React from 'react';
 import {useRouteStatus} from "@/common";
 import {TabBar} from "antd-mobile";
@@ -6,7 +5,6 @@ import {FileOutline, UserCircleOutline} from "antd-mobile-icons"
 import "./Menu.css"
 
 const Menu = function () {
-    const navigate = useNavigate()
     const routeStatus = useRouteStatus()
     let tabs: Array<any> = [
         {key: "/home", icon: <FileOutline/>, title: "首页"},
@@ -18,7 +16,7 @@ const Menu = function () {
     }
 
     function setRouteActive(path: string) {
-        navigate(path)
+        routeStatus.navigate(path)
     }
 
     function calcActiveKey() {
