@@ -42,17 +42,17 @@ export default function (props: ComponentProps<any>) {
                         </Swiper.Item>)
                     })}
                 </Swiper>
-            <div className="info_tabs">
-                <li>
-                    <a href="#intro">介绍</a>
-                </li>
-                <li>
-                    <a href="#comment">评价</a>
-                </li>
-                <li>
-                    <a href="#facility">设施</a>
-                </li>
-            </div>
+                {/*<div className="info_tabs">*/}
+                {/*    <li>*/}
+                {/*        <a href="#intro">介绍</a>*/}
+                {/*    </li>*/}
+                {/*    <li>*/}
+                {/*        <a href="#comment">评价</a>*/}
+                {/*    </li>*/}
+                {/*    <li>*/}
+                {/*        <a href="#facility">设施</a>*/}
+                {/*    </li>*/}
+                {/*</div>*/}
             <div className="detail_top">
                 <div id="intro" className="intro">
                     <div className="title">{detail.detail.name}</div>
@@ -64,58 +64,58 @@ export default function (props: ComponentProps<any>) {
                             分享
                         </div>
                     </div>
-                    <div className="title">简介简介</div>
+                    <div className="title">{detail.detail.content}</div>
                 </div>
-                <div className="preferential">
-                    <div className="title">优惠</div>
-                    <div className="coupon-list">
-                        <div className="left">
-                            <div className="item">
-                                <div className="item_l">
-                                    8折
-                                </div>
-                                <div className="item_r">
-                                    满100 打8折
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="item_l">
-                                    8折
-                                </div>
-                                <div className="item_r">
-                                    满100 打8折
-                                </div>
-                            </div>
-                        </div>
-                        <div className="right">
-                            更多
-                        </div>
-                    </div>
-                </div>
+                {/*<div className="preferential">*/}
+                {/*    <div className="title">优惠</div>*/}
+                {/*    <div className="coupon-list">*/}
+                {/*        <div className="left">*/}
+                {/*            <div className="item">*/}
+                {/*                <div className="item_l">*/}
+                {/*                    8折*/}
+                {/*                </div>*/}
+                {/*                <div className="item_r">*/}
+                {/*                    满100 打8折*/}
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*            <div className="item">*/}
+                {/*                <div className="item_l">*/}
+                {/*                    8折*/}
+                {/*                </div>*/}
+                {/*                <div className="item_r">*/}
+                {/*                    满100 打8折*/}
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*        <div className="right">*/}
+                {/*            更多*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 <div id="comment" className="comment">
                     <div className="title">评价</div>
                 </div>
-                <div id="facility" className="facility">
-                    <div className="title">设施服务</div>
-                    <div className="plan">
-                        <div className="item">
-                            <img src="@/assets/images/wrong.png" alt=""/>
-                            <span>WIFI</span>
-                        </div>
-                        <div className="item">
-                            <img src="@/assets/images/answer.png" alt=""/>
-                            <span>吹风机</span>
-                        </div>
-                        <div className="item">
-                            <img src="@/assets/images/wrong.png" alt=""/>
-                            <span>空调</span>
-                        </div>
-                        <div className="item">
-                            <img src="@/assets/images/answer.png" alt=""/>
-                            <span>有浴缸</span>
-                        </div>
-                    </div>
-                </div>
+                {/*<div id="facility" className="facility">*/}
+                {/*    <div className="title">设施服务</div>*/}
+                {/*    <div className="plan">*/}
+                {/*        <div className="item">*/}
+                {/*            <img src="@/assets/images/wrong.png" alt=""/>*/}
+                {/*            <span>WIFI</span>*/}
+                {/*        </div>*/}
+                {/*        <div className="item">*/}
+                {/*            <img src="@/assets/images/answer.png" alt=""/>*/}
+                {/*            <span>吹风机</span>*/}
+                {/*        </div>*/}
+                {/*        <div className="item">*/}
+                {/*            <img src="@/assets/images/wrong.png" alt=""/>*/}
+                {/*            <span>空调</span>*/}
+                {/*        </div>*/}
+                {/*        <div className="item">*/}
+                {/*            <img src="@/assets/images/answer.png" alt=""/>*/}
+                {/*            <span>有浴缸</span>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 <div className="notesin">
                     <div className="title">预订须知</div>
                     <div className="item">
