@@ -40,7 +40,6 @@ function RouteViewProvider() {
     ], {
         basename: "/",
     })
-
     return (
         <RouterProvider router={routerList}/>
     )

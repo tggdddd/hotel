@@ -3,13 +3,13 @@ import {Link, useNavigate} from "react-router-dom";
 import {Image, InfiniteScroll, PullToRefresh, Skeleton, Swiper} from "antd-mobile";
 import {MouseEvent, useEffect, useState} from "react";
 import {GET} from "@/utils/axios";
-import {CouponInterface, homeInfoApi, homeInfoListApi, RoomInfo} from "@/api/home";
+import {CouponInterface, homeInfoApi, homeInfoListApi, RoomInfoInterface} from "@/api/home";
 import {buildUrl, priceFormat} from "@/utils/common";
 import {useRouteStatus} from "@/common";
 import {GlobalToast} from "@/utils/toast";
 
 // 酒店卡片
-function Item({item}: { item: RoomInfo }) {
+function Item({item}: { item: RoomInfoInterface }) {
     const routeStatus = useRouteStatus();
 
     function toLove(event: MouseEvent<HTMLImageElement>) {
@@ -79,7 +79,7 @@ function Carsouel({rooms}: { rooms: Array<CouponInterface> }) {
     )
 }
 
-function Items({items}: { items: Array<RoomInfo> }) {
+function Items({items}: { items: Array<RoomInfoInterface> }) {
     return (
         <>
             {items.map(e => <Item item={e} key={e.id}/>)}
@@ -89,7 +89,7 @@ function Items({items}: { items: Array<RoomInfo> }) {
 
 export default function () {
     const [carousel, setCarousel] = useState<Array<CouponInterface>>([])
-    const [itemsData, setItemsData] = useState<Array<RoomInfo>>([])
+    const [itemsData, setItemsData] = useState<Array<RoomInfoInterface>>([])
     const [hasMore, setHasMore] = useState(false)
     const [filter, setFilter] = useState<string>("")
     useEffect(() => {

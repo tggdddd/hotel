@@ -1,5 +1,5 @@
 import {GET, POST, Result} from "@/utils/axios";
-import {CouponReceiveInterface} from "@/api/home";
+import {CouponReceiveInterface, RoomInfoInterface} from "@/api/home";
 
 export interface GuestInterface {
     id: string | undefined,
@@ -71,9 +71,58 @@ export function collectListApi(page: number = 1, loading: string | undefined = u
         loading)
 }
 
-export function collectPickListApi(page: number = 1, loading: string | undefined = undefined): Promise<Result<CommonPageInterface<CouponReceiveInterface>>> {
+export function collectPickListApi(page: number = 1, status: number = -1, loading: string | undefined = undefined): Promise<Result<CommonPageInterface<CouponReceiveInterface>>> {
     return GET("/business/coupon_list", {
-            page: page
+            page: page,
+            status
+        }, {},
+        loading)
+}
+
+
+export function submitOrderApi(data: {
+    id: string | undefined,
+    enterTime: number,
+    leaveTime: number,
+    guest: Array<string | undefined>,
+    couponReceiveId: string | undefined
+}): Promise<Result<string>> {
+    return POST("/business/submit_order", data, {}, "加载中")
+}
+
+export interface OrderDetailInterface {
+    id: string,
+    busid: string,
+    roomid: string,
+    orgin_price: number,
+    price: number,
+    starttime: number,
+    endtime: number,
+    createtime: number,
+    starttime_text: string,
+    endtime_text: string,
+    createtime_text: string,
+    status: number,
+    status_text: string,
+    coupon_receive_id: string,
+    comment: string,
+    room: RoomInfoInterface,
+    coupon: CouponReceiveInterface,
+    guests: Array<GuestInterface & {
+        orderid: string
+    }>
+    code: string
+}
+
+export function getOrderDetailApi(id: string | undefined | null): Promise<Result<OrderDetailInterface>> {
+    return GET("/business/order_detail", {id});
+}
+
+
+export function getOrderListApi(page: number = 1, status: number | undefined | null = undefined, loading: string | undefined = undefined) {
+    return GET("/business/order_list", {
+            page: page,
+            status
         }, {},
         loading)
 }

@@ -27,14 +27,15 @@ export function useRouteStatus() {
     class AppLoaderParams implements AppLoaderParamsInterface {
         constructor(public path = "/") {
         }
-
         //跳转页面
         get redirect() {
             // 访问重定向首页
             if (this.path === '/') {
-                return "/home"
+                navigate("/home");
+                return "/home";
             }
             if (!this.isLogin && this.auth) {
+                navigate("/login");
                 return "/login"
             }
         }

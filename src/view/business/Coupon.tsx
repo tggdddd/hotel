@@ -1,6 +1,6 @@
 import "@/assets/css/index.css";
 import "@/assets/css/swiper-bundle.min.css";
-import {Button, InfiniteScroll, NavBar, PullToRefresh} from "antd-mobile";
+import {Button, InfiniteScroll, NavBar, PullToRefresh, Tabs} from "antd-mobile";
 import React, {useEffect, useState} from "react";
 import {CouponReceiveInterface} from "@/api/home";
 import {useRouteStatus} from "@/common";
@@ -11,9 +11,15 @@ export default function () {
     let [page, setPage] = useState(1)
     let [list, setList] = useState<Array<CouponReceiveInterface>>([])
     let [hasMore, setHasMore] = useState(true)
-
+    const [status, setStatus] = useState<number>(-1)
     useEffect(() => {
-        loadMore().then()
+        collectPickListApi(page, status)
+            .then(result => {
+                if (result.data) {
+                    setHasMore(result.data.hasMore)
+                    setList(data => [...data, ...result.data.list])
+                }
+            })
     }, []);
 
     // 下拉刷新
@@ -21,22 +27,50 @@ export default function () {
         setPage(1)
         setHasMore(true)
         setList([])
-        await loadMore()
-    }
-
-    //上拉加载
-    async function loadMore() {
-        const result = await collectPickListApi(page)
+        const result = await collectPickListApi(page, status)
         if (result.data) {
             setHasMore(result.data.hasMore)
             setList(data => [...data, ...result.data.list])
         }
-
+    }
+    //上拉加载
+    async function loadMore() {
+        const result = await collectPickListApi(page, status)
+        if (result.data) {
+            setHasMore(result.data.hasMore)
+            setList(data => [...data, ...result.data.list])
+        }
     }
 
+    function changeStaus(value: string) {
+        setStatus(Number.parseInt(value))
+        onRefresh()
+    }
+
+    const tabList = [
+        {
+            title: "全部",
+            key: "-1",
+        }, {
+            title: "未使用",
+            key: "0",
+        }, {
+            title: "已使用",
+            key: "1"
+        }, {
+            title: "已过期",
+            key: "2"
+        }
+    ]
     return (
         <>
-            <NavBar onBack={routeStatus.back} className="top">首页</NavBar>
+            <NavBar onBack={routeStatus.back} className="top">我的优惠券</NavBar>
+            <Tabs className="tabs" onChange={changeStaus}>
+                {
+                    tabList.map((e, index) => <Tabs.Tab key={index} title={e.title}>
+                    </Tabs.Tab>)
+                }
+            </Tabs>
             <PullToRefresh onRefresh={() => onRefresh()}>
                 {list.map(item => (<>
                     <div className="coupon_detail">
@@ -53,10 +87,10 @@ export default function () {
                                 </div>
                             </div>
                             <div className="receive">
-                                {item.coupon.status == 0 ?
+                                {item.status == 0 ?
                                     <Button size="small" color='primary'
                                             onClick={() => routeStatus.navigate("/home")}>{item.coupon.status_text}</Button> :
-                                    <Button size="small" disabled color='primary'>{item.coupon.status_text}</Button>
+                                    <Button size="small" disabled color='primary'>{item.status_text}</Button>
                                 }
                             </div>
                         </div>

@@ -13,3 +13,7 @@ export function buildUrl(url: string, data: Record<string, string>) {
     }
     return url + (url.indexOf("?") === -1 ? "?" : "&") + result.join("&");
 }
+
+export function diffDay(data1: number, data2: number) {
+
+}

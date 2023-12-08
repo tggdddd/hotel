@@ -80,7 +80,7 @@ export default function () {
                     </Link>
                 </div>
                 <div className="item">
-                    <Link to="/profile">
+                    <Link to="/info">
                         <div className="title">关于我们</div>
                         <div className="icon">
                             <img src="@/assets/images/right.png" alt=""/>

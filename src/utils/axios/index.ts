@@ -92,6 +92,7 @@ function createAxios() {
                     break;
                 case 401:
                     message = "未授权，请重新登录(401)";
+                    window.location.href = "/login"
                     // 这里可以做清空storage并跳转到登录页的操作
                     break;
                 case 403:

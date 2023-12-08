@@ -1,13 +1,13 @@
 import "@/assets/css/detail.css";
 import "@/assets/css/swiper-bundle.min.css";
-import React, {ComponentProps, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {NavLink, useNavigate, useSearchParams} from "react-router-dom";
 import {Image, NavBar, Swiper} from "antd-mobile";
 import {buildUrl} from "@/utils/common";
 import {getHotelDetailApi, homeDetailInterface} from "@/api/home";
 
 
-export default function (props: ComponentProps<any>) {
+export default function () {
     const [searchParams] = useSearchParams();
     const id = searchParams.get("id") || "";
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function (props: ComponentProps<any>) {
                         return (<Swiper.Item key={index}>
                             <Image src={src} fit='fill' style={{
                                 "width": "100%",
-                                "height": "123px"
+                                "height": "220px"
                             }}/>
                         </Swiper.Item>)
                     })}
@@ -134,10 +134,10 @@ export default function (props: ComponentProps<any>) {
             </div>
             <div className="foot-bar">
                 <div className="price">
-                    ￥60
+                    ￥{detail.detail.price}
                 </div>
                 <div className="btn">
-                    <NavLink to={buildUrl("/home/confirm/", {id: props.id})}>立即预定</NavLink>
+                    <NavLink to={buildUrl("/home/confirm/", {id: id})}>立即预定</NavLink>
                 </div>
             </div>
             </>}</>

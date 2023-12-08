@@ -1,7 +1,7 @@
 import {GET, Result} from "@/utils/axios";
 import {BusinessInterface} from "@/api/business";
 
-export interface RoomInfo {
+export interface RoomInfoInterface {
     id: string,
     name: string,
     "thumb": string,
@@ -33,7 +33,7 @@ export interface CouponInterface {
 
 export interface HomeInfo {
     carousel: Array<CouponInterface>,
-    list: Array<RoomInfo>,
+    list: Array<RoomInfoInterface>,
     count: number
 }
 
@@ -71,8 +71,8 @@ export function couponPickApi(id: string, loading: string | undefined = undefine
 }
 
 export interface homeDetailInterface {
-    detail: RoomInfo,
-    coupon: Array<CouponInterface>,
+    detail: RoomInfoInterface,
+    coupon: Array<CouponReceiveInterface>,
     comment: Array<any>,
     equipment: Array<any>
 }

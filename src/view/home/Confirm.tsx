@@ -1,25 +1,77 @@
 import "@/assets/css/confirm.css"
 import {useRouteStatus} from "@/common";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {PickerDate} from "antd-mobile/es/components/date-picker/util";
-import {Button, DatePicker, NavBar, Popup, Space} from "antd-mobile";
-import {NavLink} from "react-router-dom";
+import {Button, DatePicker, NavBar, Picker, Popup, Space} from "antd-mobile";
+import {useSearchParams} from "react-router-dom";
 import Guest from "@/view/home/Guest";
-import {GuestInterface} from "@/api/business";
-import {buildUrl} from "@/utils/common";
+import {GuestInterface, submitOrderApi} from "@/api/business";
+import {priceFormat} from "@/utils/common";
+import {CouponReceiveInterface, getHotelDetailApi, homeDetailInterface} from "@/api/home";
+import {GlobalToast} from "@/utils/toast";
+
 
 function Confirm() {
+    const [searchParams] = useSearchParams();
+    const id = searchParams.get("id") || "";
+    const [detail, setDetail] = useState<homeDetailInterface>()
+    useEffect(() => {
+        getHotelDetailApi(id).then(res => {
+            setDetail(res.data)
+        })
+    }, []);
+
     const routeStatus = useRouteStatus();
     // 时间选择器
     const [enterVisible, setEnterVisible] = useState(false)
     const [enterDate, setEnterDate] = useState<PickerDate>(new Date())
     const [leaveVisible, setLeaveVisible] = useState(false)
-    const [leaveDate, setLeaveDate] = useState<PickerDate>(new Date())
+    const [leaveDate, setLeaveDate] = useState<PickerDate>(new Date(new Date().getTime() + 86400000))
     const [guestVisible, setGuestVisible] = useState(false)
     const [guests, setGuests] = useState<Array<GuestInterface>>([])
+    const [couponSelect, setCouponSelect] = useState<CouponReceiveInterface>()
+    const [couponSelectShow, setCouponSelectShow] = useState<boolean>(false)
+
+    //选择优惠券
+    function CounponConfirm(value: any) {
+        setCouponSelectShow(false)
+        let index = detail?.coupon.findIndex(e => e.id == value)
+        if (index != null) {
+            setCouponSelect(detail?.coupon[index])
+        }
+    }
+
+    function calcDay() {
+        let duration = leaveDate.getTime() - enterDate.getTime()
+        return Math.round(duration / 86400000)
+    }
+
+    function calcPrice() {
+        return priceFormat(calcDay() * (detail?.detail.price || 0))
+    }
+
+    function totalPrice() {
+        return priceFormat(Number.parseFloat(calcPrice()) * (couponSelect?.coupon.rate || 1))
+    }
+
+    async function submitOrder() {
+        if (guests.length === 0) {
+            GlobalToast.error("请添加住客信息");
+            return
+        }
+        const result = await submitOrderApi({
+            id: id,
+            guest: guests.map(e => e.id),
+            couponReceiveId: couponSelect?.id,
+            enterTime: enterDate.getTime() / 1000,
+            leaveTime: leaveDate.getTime() / 1000
+        })
+        await GlobalToast.success(result.msg);
+        routeStatus.navigate("/business");
+        // routeStatus.navigate(buildUrl("/home/booking/", {id: result.data}))
+    }
     return (
         <>
-
             <NavBar onBack={routeStatus.back} className="top">提交订单</NavBar>
             <div className="skeleton">
                 <div className="detail">
@@ -27,7 +79,7 @@ function Confirm() {
                         <img src="@/assets/images/hotel1.jpg" alt=""/>
                     </div>
                     <div className="right">
-                        <p>暑假特价房</p>
+                        <p>{detail?.detail.name}</p>
                         <div className="tips">
                             <span>新房特惠</span>
                             <span>10.00㎡</span>
@@ -47,8 +99,8 @@ function Confirm() {
                                         }}
                                         onConfirm={(value) => {
                                             setEnterDate(value)
-                                            if (leaveDate.getTime() < value.getTime()) {
-                                                setLeaveDate(value)
+                                            if (leaveDate.getTime() < value.getTime() + 86400000) {
+                                                setLeaveDate(new Date(value.getTime() + 86400000))
                                             }
                                         }}
                                         defaultValue={enterDate}/>
@@ -70,11 +122,11 @@ function Confirm() {
                             <label>{leaveDate.toLocaleDateString()}</label>
                         </div>
                         <div className="item">
-                            <div style={{marginRight: "8px"}}>住客信息</div>
-                            <Space wrap justify="center" align="center">
+                            <div style={{marginRight: "8px", minWidth: "4em"}}>住客信息</div>
+                            <Space wrap justify="center" align="center" style={{width: "100%"}}>
                                 {guests.map((guest, index) => <div key={index}>{guest.nickname}</div>)}
                             </Space>
-                            <Button style={{marginLeft: "auto"}}
+                            <Button style={{marginLeft: "auto", minWidth: "4em"}}
                                     shape="rectangular"
                                     size="small"
                                     fill="none"
@@ -96,20 +148,42 @@ function Confirm() {
                     </form>
                 </div>
                 <div className="skeleton_price">
+                    <div className="tips">优惠券</div>
+                    <p>{couponSelect?.coupon.title}</p>
+                    <Button size="mini" color="primary" onClick={() => setCouponSelectShow(true)}>选择</Button>
+                    {detail ? <Picker
+                        columns={[detail.coupon.map(e => {
+                                return {
+                                    label: e.coupon.title,
+                                    value: e.id,
+                                    key: e.id
+                                }
+                            }
+                        )]}
+                        visible={couponSelectShow}
+                        onClose={() => {
+                            setCouponSelectShow(false)
+                        }}
+                        onConfirm={CounponConfirm}
+                    ></Picker> : ""}
+                </div>
+
+                <div className="skeleton_price">
                     <div className="tips">房间费用</div>
                     <div className="prices">
-                        <span>￥6600</span>
-                        <span>共 1 晚</span>
+                        <span>￥{calcPrice()}</span>
+                        {/*todo<span>共 {diffDay(leaveDate.getTime(),enterDate.getTime())} 晚</span>*/}
+                        <span>共 {calcDay()} 晚</span>
                     </div>
                 </div>
             </div>
             <div className="comfirm_foot-bar">
                 <div className="text">
                     <span>总价:</span>
-                    <span>￥6600.00</span>
+                    <span>￥{totalPrice()}</span>
                 </div>
                 <div className="btns">
-                    <NavLink to={buildUrl("/home/booking/", {id: "3"})}>提交订单</NavLink>
+                    <div onClick={submitOrder}>提交订单</div>
                 </div>
             </div>
         </>)
