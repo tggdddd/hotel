@@ -4,14 +4,14 @@ import {Link, useNavigate} from "react-router-dom";
 import {InfiniteScroll, NavBar, PullToRefresh, Skeleton} from "antd-mobile";
 import React, {MouseEvent, useEffect, useState} from "react";
 import {GET} from "@/utils/axios";
-import {RoomInfo} from "@/api/home";
 import {buildUrl, priceFormat} from "@/utils/common";
 import {useRouteStatus} from "@/common";
 import {GlobalToast} from "@/utils/toast";
 import {collectListApi} from "@/api/business";
+import {RoomInfoInterface} from "@/api/home";
 
 // 酒店卡片
-function Item({item}: { item: RoomInfo }) {
+function Item({item}: { item: RoomInfoInterface }) {
     const routeStatus = useRouteStatus();
 
     function toLove(event: MouseEvent<HTMLImageElement>) {
@@ -60,7 +60,7 @@ function Item({item}: { item: RoomInfo }) {
     </div>)
 }
 
-function Items({items}: { items: Array<RoomInfo> }) {
+function Items({items}: { items: Array<RoomInfoInterface> }) {
     return (
         <>
             {items.map(e => <Item item={e} key={e.id}/>)}
@@ -71,7 +71,7 @@ function Items({items}: { items: Array<RoomInfo> }) {
 export default function () {
     const routeStatus = useRouteStatus();
     let [page, setPage] = useState(1)
-    let [list, setList] = useState<Array<RoomInfo>>([])
+    let [list, setList] = useState<Array<RoomInfoInterface>>([])
     let [hasMore, setHasMore] = useState(true)
 
     useEffect(() => {
