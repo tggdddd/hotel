@@ -39,7 +39,6 @@ function Component() {
                 <div>这里是极速创想第一门店，欢迎你的预订入住</div>
             </div>
         </div>
-
     </>)
 }
 
