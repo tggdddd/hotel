@@ -114,7 +114,7 @@ function Component() {
                     title={
                         <div style={{fontWeight: 'normal'}}>
                             <AntOutline style={{marginRight: '4px', color: '#1677ff'}}/>
-                            {item.room.name}
+                            {item?.room?.name}
                         </div>
                     }
                     onBodyClick={onBodyClick}
@@ -124,12 +124,12 @@ function Component() {
                     <div style={{}}>
                         <div style={{display: "flex", maxHeight: "80px"}}>
                             <div style={{flex: 3, paddingRight: "12px"}}>
-                                <Image lazy style={{borderRadius: "4px"}} fit="contain" src={item.room.thumb_text}/>
+                                <Image lazy style={{borderRadius: "4px"}} fit="contain" src={item?.room?.thumb_text}/>
                             </div>
                             <div style={{flex: 5}}>
-                                <div>人员：{item.guests.map(e => e.nickname).join(",")}</div>
-                                <div>开始：{item.starttime_text}</div>
-                                <div>结束：{item.endtime_text}</div>
+                                <div>人员：{item?.guests?.map(e => e.nickname).join(",")}</div>
+                                <div>开始：{item?.starttime_text}</div>
+                                <div>结束：{item?.endtime_text}</div>
                             </div>
                         </div>
                         {/*<div>{item.createtime_text}</div>*/}

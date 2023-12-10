@@ -2,11 +2,18 @@ import "@/assets/css/user.css"
 import {delCookie} from "@/state/state";
 import {Link, useNavigate} from "react-router-dom";
 import {useRouteStatus} from "@/common";
+import {useEffect, useState} from "react";
+import {getOrderNumberApi, orderNumbersInterface} from "@/api/business";
 
 export default function () {
     const navigate = useNavigate();
     const routeStatus = useRouteStatus();
-
+    const [orders, setOrders] = useState<orderNumbersInterface>()
+    useEffect(() => {
+        getOrderNumberApi().then(res => {
+            setOrders(res.data)
+        })
+    }, []);
     function loginOut() {
         delCookie("user")
         delCookie("token")
@@ -34,15 +41,15 @@ export default function () {
             </div>
             <div className="menu-center">
                 <div className="item">
-                    <div>1</div>
-                    <div className="text">支付</div>
-                </div>
-                <div className="item">
-                    <div>10</div>
+                    <div>{orders?.unPaid || 0}</div>
                     <div className="text">待支付</div>
                 </div>
                 <div className="item">
-                    <div>7</div>
+                    <div>{orders?.paid || 0}</div>
+                    <div className="text">已支付</div>
+                </div>
+                <div className="item">
+                    <div>{orders?.unComment || 0}</div>
                     <div className="text">待评论</div>
                 </div>
             </div>

@@ -126,3 +126,13 @@ export function getOrderListApi(page: number = 1, status: number | undefined | n
         }, {},
         loading)
 }
+
+export interface orderNumbersInterface {
+    unPaid: number,
+    unComment: number,
+    paid: number
+}
+
+export function getOrderNumberApi(): Promise<Result<orderNumbersInterface>> {
+    return GET("/business/orderNumbers")
+}
