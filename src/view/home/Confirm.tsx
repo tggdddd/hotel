@@ -60,7 +60,7 @@ function Confirm() {
     }
 
     function totalPrice() {
-        return priceFormat(Number.parseFloat(calcPrice()) * (couponSelect?.coupon.rate || 1))
+        return priceFormat(Number.parseFloat(calcPrice()) * (couponSelect?.coupon?.rate || 1))
     }
 
     async function submitOrder() {
@@ -180,12 +180,12 @@ function Confirm() {
                 </div>
                 <div className="skeleton_price">
                     <div className="tips">优惠券</div>
-                    <p>{couponSelect?.coupon.title}</p>
+                    <p>{couponSelect?.coupon?.title}</p>
                     <Button size="mini" color="primary" onClick={() => setCouponSelectShow(true)}>选择</Button>
                     {detail ? <Picker
                         columns={[detail.coupon.map(e => {
                                 return {
-                                    label: e.coupon.title,
+                                    label: e?.coupon?.title,
                                     value: e.id,
                                     key: e.id
                                 }
