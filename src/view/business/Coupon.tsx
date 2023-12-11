@@ -78,7 +78,7 @@ export default function () {
                             <div className="left">
                                 <div className="left_top">
                                     <div>
-                                        <span>{item.coupon.rate * 10}</span>折
+                                        <span>{(item?.coupon?.rate || 0) * 10}</span>折
                                     </div>
                                     <div className="top_info">
                                         <div>优惠券</div>
@@ -89,7 +89,7 @@ export default function () {
                             <div className="receive">
                                 {item.status == 0 ?
                                     <Button size="small" color='primary'
-                                            onClick={() => routeStatus.navigate("/home")}>{item.coupon.status_text}</Button> :
+                                            onClick={() => routeStatus.navigate("/home")}>{item?.coupon?.status_text}</Button> :
                                     <Button size="small" disabled color='primary'>{item.status_text}</Button>
                                 }
                             </div>
