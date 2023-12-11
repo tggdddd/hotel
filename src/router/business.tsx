@@ -7,6 +7,8 @@ import Collect from "@/view/business/Collect";
 import Order from "@/view/business/Order";
 import Coupon from "@/view/business/Coupon";
 import Info from "@/view/business/Info";
+import OrderInfo from "@/view/business/OrderInfo";
+import ToComment from "@/view/business/ToComment";
 
 const routes: Array<any> = [
     {
@@ -42,6 +44,14 @@ const routes: Array<any> = [
     {
         path: '/info',
         element: <Info/>
+    },
+    {
+        path: '/orderInfo',
+        element: <OrderInfo/>
+    },
+    {
+        path: '/toComment',
+        element: <ToComment/>
     }
 ]
 

@@ -28,8 +28,12 @@ function Component() {
             <div className="hotelinfo_address">
                 广东省深圳市福田区华强北街道振兴路341号上步工业区
             </div>
-            <Map className="map" enableScrollWheelZoom enableDragging={true}
-                 center={{lng: 113.3265410, lat: 23.1057070}} zoom="11"/>
+            <Map className="map" enableScrollWheelZoom enableDragging
+                 center={{lng: 113.3265410, lat: 23.1057070}} zoom="11"
+
+                 heading={0}
+                 tilt={40}
+                 onClick={e => console.log(e)}/>
             <div className="hotelinfo_desc">
                 <div className="desc_title">简介</div>
                 <div>这里是极速创想第一门店</div>

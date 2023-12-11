@@ -2,6 +2,14 @@ body {
     background-color: #f4f6f8;
 }
 
+.placeholder {
+    opacity: .4;
+    font-size: .98em;
+}
+
+.no-placeholder {
+    font-size: .9em;
+}
 .top {
     z-index: 10907;
     background: rgb(55, 68, 134);

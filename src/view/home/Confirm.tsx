@@ -2,7 +2,7 @@ import "@/assets/css/confirm.css"
 import {useRouteStatus} from "@/common";
 import React, {useEffect, useState} from "react";
 import {PickerDate} from "antd-mobile/es/components/date-picker/util";
-import {Button, DatePicker, NavBar, Picker, Popup, Space} from "antd-mobile";
+import {Button, CalendarPicker, NavBar, Picker, Popup, Space} from "antd-mobile";
 import {useSearchParams} from "react-router-dom";
 import Guest from "@/view/home/Guest";
 import {GuestInterface, submitOrderApi} from "@/api/business";
@@ -31,7 +31,16 @@ function Confirm() {
     const [guests, setGuests] = useState<Array<GuestInterface>>([])
     const [couponSelect, setCouponSelect] = useState<CouponReceiveInterface>()
     const [couponSelectShow, setCouponSelectShow] = useState<boolean>(false)
-
+    const [timeDuration, setTimeDuration] = useState("")
+    const [timeDurationShow, setTimeDurationShow] = useState(false)
+    //选择日期
+    const DateChange = (val: any) => {
+        setTimeDurationShow(false)
+        var datestr = `${new Date(val[0]).toLocaleDateString()} - ${new Date(val[1]).toLocaleDateString()}`
+        setTimeDuration(datestr)
+        setEnterDate(val[0])
+        setLeaveDate(val[1])
+    }
     //选择优惠券
     function CounponConfirm(value: any) {
         setCouponSelectShow(false)
@@ -89,38 +98,60 @@ function Confirm() {
                 </div>
                 <div className="skeleton_rect">
                     <form>
-                        <div className="item" onClick={() => {
-                            setEnterVisible(true)
-                        }}>
+
+                        <div className="item">
                             <label>入住日期</label>
-                            <DatePicker visible={enterVisible}
-                                        onClose={() => {
-                                            setEnterVisible(false)
-                                        }}
-                                        onConfirm={(value) => {
-                                            setEnterDate(value)
-                                            if (leaveDate.getTime() < value.getTime() + 86400000) {
-                                                setLeaveDate(new Date(value.getTime() + 86400000))
-                                            }
-                                        }}
-                                        defaultValue={enterDate}/>
-                            <label>{enterDate.toLocaleDateString()}</label>
+                            <div onClick={() => setTimeDurationShow(true)} className="adm-input item_right">
+                                <div
+                                    className={"adm-input-element " + (timeDuration.length === 0 ? "placeholder" : "no-placeholder")}
+                                    style={{
+                                        textAlign: "center",
+                                        width: "100%"
+                                    }}>{timeDuration || "请选择入住日期"}</div>
+                            </div>
+                            <CalendarPicker
+                                visible={timeDurationShow}
+                                min={new Date()}
+                                selectionMode='range'
+                                onClose={() => setTimeDurationShow(false)}
+                                onMaskClick={() => setTimeDurationShow(false)}
+                                onConfirm={DateChange}
+                            />
                         </div>
-                        <div className="item" onClick={() => {
-                            setLeaveVisible(true)
-                        }}>
-                            <label>离店日期</label>
-                            <DatePicker min={enterDate}
-                                        visible={leaveVisible}
-                                        onClose={() => {
-                                            setLeaveVisible(false)
-                                        }}
-                                        onConfirm={(value) => {
-                                            setLeaveDate(value)
-                                        }}
-                                        defaultValue={leaveDate}/>
-                            <label>{leaveDate.toLocaleDateString()}</label>
-                        </div>
+
+
+                        {/*<div className="item" onClick={() => {*/}
+                        {/*    setEnterVisible(true)*/}
+                        {/*}}>*/}
+                        {/*    <label>入住日期</label>*/}
+                        {/*    <DatePicker visible={enterVisible}*/}
+                        {/*                onClose={() => {*/}
+                        {/*                    setEnterVisible(false)*/}
+                        {/*                }}*/}
+                        {/*                onConfirm={(value) => {*/}
+                        {/*                    setEnterDate(value)*/}
+                        {/*                    if (leaveDate.getTime() < value.getTime() + 86400000) {*/}
+                        {/*                        setLeaveDate(new Date(value.getTime() + 86400000))*/}
+                        {/*                    }*/}
+                        {/*                }}*/}
+                        {/*                defaultValue={enterDate}/>*/}
+                        {/*    <label>{enterDate.toLocaleDateString()}</label>*/}
+                        {/*</div>*/}
+                        {/*<div className="item" onClick={() => {*/}
+                        {/*    setLeaveVisible(true)*/}
+                        {/*}}>*/}
+                        {/*    <label>离店日期</label>*/}
+                        {/*    <DatePicker min={enterDate}*/}
+                        {/*                visible={leaveVisible}*/}
+                        {/*                onClose={() => {*/}
+                        {/*                    setLeaveVisible(false)*/}
+                        {/*                }}*/}
+                        {/*                onConfirm={(value) => {*/}
+                        {/*                    setLeaveDate(value)*/}
+                        {/*                }}*/}
+                        {/*                defaultValue={leaveDate}/>*/}
+                        {/*    <label>{leaveDate.toLocaleDateString()}</label>*/}
+                        {/*</div>*/}
                         <div className="item">
                             <div style={{marginRight: "8px", minWidth: "4em"}}>住客信息</div>
                             <Space wrap justify="center" align="center" style={{width: "100%"}}>

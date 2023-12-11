@@ -110,7 +110,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 53px;
+    height: 64px;
     width: 50vw;
     padding-left: 16px;
 }
@@ -126,4 +126,6 @@ body {
 
 .order_info .info_footer .detail .right .tips {
     color: #909399;
+    display: flex;
+    flex-wrap: wrap;
 }

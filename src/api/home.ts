@@ -44,8 +44,8 @@ export interface CouponReceiveInterface {
     status_text: string,
     createtime: number,
     createtime_text: string,
-    business: BusinessInterface,
-    coupon: CouponInterface
+    business: BusinessInterface | undefined,
+    coupon: CouponInterface | undefined
 }
 
 export function homeInfoApi(filter: string): Promise<Result<HomeInfo>> {

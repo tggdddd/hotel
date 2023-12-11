@@ -1,6 +1,7 @@
 import {GET, POST, Result} from "@/utils/axios";
 import {CouponReceiveInterface, RoomInfoInterface} from "@/api/home";
 
+
 export interface GuestInterface {
     id: string | undefined,
     busid: string,
@@ -106,14 +107,19 @@ export interface OrderDetailInterface {
     status_text: string,
     coupon_receive_id: string,
     comment: string,
-    room: RoomInfoInterface,
-    coupon: CouponReceiveInterface,
+    room: RoomInfoInterface | undefined,
+    coupon: CouponReceiveInterface | undefined | null,
     guests: Array<GuestInterface & {
         orderid: string
     }>
     code: string
 }
 
+export interface orderNumbersInterface {
+    unPaid: number,
+    unComment: number,
+    paid: number
+}
 export function getOrderDetailApi(id: string | undefined | null): Promise<Result<OrderDetailInterface>> {
     return GET("/business/order_detail", {id});
 }
@@ -127,12 +133,15 @@ export function getOrderListApi(page: number = 1, status: number | undefined | n
         loading)
 }
 
-export interface orderNumbersInterface {
-    unPaid: number,
-    unComment: number,
-    paid: number
-}
 
 export function getOrderNumberApi(): Promise<Result<orderNumbersInterface>> {
     return GET("/business/orderNumbers")
+}
+
+export function getOrderInfoApi(id: string): Promise<Result<OrderDetailInterface>> {
+    return GET("/business/order_detail", {id})
+}
+
+export function cancelOrderApi(id: string): Promise<Result<any>> {
+    return GET("/business/order_cancel", {id})
 }

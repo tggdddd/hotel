@@ -1,16 +1,10 @@
-import {Button, Card, Image, InfiniteScroll, NavBar, PullToRefresh, Space, Tabs} from "antd-mobile";
+import {Button, InfiniteScroll, NavBar, PullToRefresh, Space, Tabs} from "antd-mobile";
 import {useRouteStatus} from "@/common";
-import "@/assets/css/order.css";
-import {getOrderListApi, OrderDetailInterface} from "@/api/business";
+import '@/assets/css/order.css'
+import {cancelOrderApi, getOrderListApi, OrderDetailInterface} from "@/api/business";
 import React, {useState} from "react";
-import {AntOutline} from "antd-mobile-icons";
-import {GlobalToast} from "@/utils/toast";
+import {dateFormat, diffDay} from "@/utils/common";
 
-function Tab({title}: any) {
-    return (<Tabs.Tab title='水果' key='fruits'>
-        菠萝
-    </Tabs.Tab>)
-}
 
 function Component() {
     const routeStatus = useRouteStatus();
@@ -45,61 +39,19 @@ function Component() {
     }
 
     const tabList = [
-        {
-            title: "全部订单",
-            key: ""
-        },
-        {
-            title: "已支付",
-            key: "1"
-        },
-        {
-            title: "已入住",
-            key: "2"
-        },
-        {
-            title: "已退房",
-            key: "3"
-        },
-        {
-            title: "已评价",
-            key: "4"
-        },
-        {
-            title: "申请退款",
-            key: "-1"
-        },
-        {
-            title: "审核通过",
-            key: "-2"
-        },
-        {
-            title: "审核不通过",
-            key: "-3"
-        }
+        {title: "全部", key: ""},
+        {title: "已支付", key: "1"},
+        {title: "已入住", key: "2"},
+        {title: "已退房", key: "3"},
+        {title: "已评价", key: "4"},
+        {title: "申请退款", key: "-1"}
     ]
 
-    function onBodyClick() {
 
+    function cancelOrder(id: string) {
+        cancelOrderApi(id);
     }
 
-    function onHeaderClick() {
-
-    }
-
-    function orderDetail(id: string) {
-        GlobalToast.show("不支持")
-    }
-
-    function orderComment(id: string) {
-        GlobalToast.show("不支持")
-
-    }
-
-    function orderRefund(id: string) {
-        GlobalToast.show("不支持")
-
-    }
     return (<>
         <NavBar className="top" onBack={routeStatus.back}>房间订单</NavBar>
         <Tabs className="tabs" onChange={changeStaus}>
@@ -109,69 +61,52 @@ function Component() {
             }
         </Tabs>
         <PullToRefresh onRefresh={() => onRefresh()}>
-            {list.map(item => (<>
-                <Card
-                    title={
-                        <div style={{fontWeight: 'normal'}}>
-                            <AntOutline style={{marginRight: '4px', color: '#1677ff'}}/>
-                            {item?.room?.name}
+            <div className="order_list">
+                {list.map((item, key) =>
+                    <div className="item" key={key}>
+                        <div className="item_top">
+                            <p>{item?.room?.name}</p>
+                            <div className="top_tag">{item?.status_text}</div>
                         </div>
-                    }
-                    onBodyClick={onBodyClick}
-                    onHeaderClick={onHeaderClick}
-                    style={{borderRadius: '4px', marginTop: '4px', boxShadow: "1px 1px 2px #77777733"}}
-                >
-                    <div style={{}}>
-                        <div style={{display: "flex", maxHeight: "80px"}}>
-                            <div style={{flex: 3, paddingRight: "12px"}}>
-                                <Image lazy style={{borderRadius: "4px"}} fit="contain" src={item?.room?.thumb_text}/>
+                        <div className="house">
+                            <div className="item_swipers">
+                                <img src="@/assets/images/hotel1.jpg" alt=""/>
                             </div>
-                            <div style={{flex: 5}}>
-                                <div>人员：{item?.guests?.map(e => e.nickname).join(",")}</div>
-                                <div>开始：{item?.starttime_text}</div>
-                                <div>结束：{item?.endtime_text}</div>
+                            <div className="item_times">
+                                <div>
+                                    <div>{dateFormat(item?.starttime, "MM月dd日")}</div>
+                                    <div>{dateFormat(item?.starttime, "week hh:mm")}</div>
+                                </div>
+                                <div>
+                                    <div>共{diffDay(item?.starttime, item?.endtime)}晚</div>
+                                    <div className="item_right">
+                                        <img src="@/assets/images/right1.png" alt=""/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>{dateFormat(item?.endtime, "MM月dd日")}</div>
+                                    <div>{dateFormat(item?.endtime, "week hh:mm")}</div>
+                                </div>
+                                <div>
+                                    <div className="item_pay">订单总价</div>
+                                    <div className="item_price">￥{item.price}</div>
+                                </div>
                             </div>
                         </div>
-                        {/*<div>{item.createtime_text}</div>*/}
+                        <div className="item_bar">
+                            <Space>
+                                {(item.status == 0 || item.status == 1) &&
+                                    <Button size="small" onClick={() => cancelOrder(item.id)}
+                                            color="danger">取消订单</Button>}
+                                {item.status == 3 && <Button size="small" color="success">评价</Button>}
+                                <Button size="small" color="primary"
+                                        onClick={() => routeStatus.navigate(`/orderInfo?orderid=${item.id}`)}>订单详情</Button>
+                            </Space>
+                        </div>
+
                     </div>
-                    <div style={{
-                        paddingTop: "11px",
-                        borderTop: "1px solid #e5e5e5",
-                        display: "flex",
-                        justifyContent: "flex-end"
-                    }} onClick={e => e.stopPropagation()}>
-                        <Space>
-                            <Button
-                                color='primary'
-                                size="mini"
-                                onClick={() => {
-                                    orderDetail(item.id)
-                                }}
-                            >
-                                详情
-                            </Button>
-                            <Button
-                                color='primary'
-                                size="mini"
-                                onClick={() => {
-                                    orderComment(item.id)
-                                }}
-                            >
-                                评价
-                            </Button>
-                            <Button
-                                color='primary'
-                                size="mini"
-                                onClick={() => {
-                                    orderRefund(item.id)
-                                }}
-                            >
-                                退款
-                            </Button>
-                        </Space>
-                    </div>
-                </Card>
-            </>))}
+                )}
+            </div>
             <InfiniteScroll loadMore={loadMore} hasMore={hasMore}/>
         </PullToRefresh>
     </>)
